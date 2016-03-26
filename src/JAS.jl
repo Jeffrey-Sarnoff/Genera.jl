@@ -10,9 +10,10 @@ For example, Float16 and BigFloat could be included.
 """
 module JAS
 
-export Float
+export Float, StdFloat
 
 !isdefined(:Float) && typealias Float Union{Float64, Float32, Float16}
+!isdefined(:StdFloat) && typealias Float Union{Float64, Float32}
 
 
 
