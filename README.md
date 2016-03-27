@@ -1,1 +1,1 @@
-## JAS.jl
+## Genera.jl
