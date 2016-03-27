@@ -1,5 +1,5 @@
 ## Genera.jl
-<div style="text-align:right;">
+<div style="text-color:green;">
 ######### foment the good, till the ground, water the soil, give it light
 </div>
 ```ruby
