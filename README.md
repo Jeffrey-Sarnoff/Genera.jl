@@ -1,8 +1,5 @@
 <style>
-social.div {
-color:fff;
-font-size: 20px;
-}
+social { color:fff; }
 </style>
 ## Genera.jl
 <div class="social">
