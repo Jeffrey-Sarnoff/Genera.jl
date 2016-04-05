@@ -11,7 +11,7 @@ For example, Float16 and BigFloat could be included.
 module Genera
 
 export Float, StdFloat,
-       RealNeighborhood
+
 
 !isdefined(:Float) && typealias Float Union{Float64, Float32, Float16}
 !isdefined(:StdFloat) && typealias StdFloat Union{Float64, Float32}
