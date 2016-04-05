@@ -13,8 +13,8 @@ module Genera
 export Float, StdFloat,
 
 
-!isdefined(:Float) && typealias Float Union{Float64, Float32, Float16}
-!isdefined(:StdFloat) && typealias StdFloat Union{Float64, Float32}
+!isdefined(:SysFloat) && typealias SysFloat Union{Float64, Float32}
+!isdefined(:StdFloat) && typealias StdFloat Union{Float64, Float32, Float16}
 
 
 end # Genera
