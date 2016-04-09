@@ -10,7 +10,7 @@ For example, Float16 and BigFloat could be included.
 """
 module Genera
 
-export Float, StdFloat,
+export SysFloat, StdFloat
 
 
 !isdefined(:SysFloat) && typealias SysFloat Union{Float64, Float32}
