@@ -11,7 +11,8 @@ For example, Float16 and BigFloat could be included.
 module Genera
 
 export SysFloat, StdFloat, 
-       @delegate
+       @delegate, @delegate2,
+       @delegateTyped, @delegateTyped2T
 
 include("delegate.jl")
 
