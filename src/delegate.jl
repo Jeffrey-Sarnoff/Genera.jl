@@ -55,6 +55,7 @@ macro delegate(source, targets)
 end
 
 
+# for methods that take two equi-typed source arguments) and return an equi-typed result
 
 macro delegate2(sourceExemplar, targets)
   typesname = esc(sourceExemplar.args[1])
@@ -66,7 +67,7 @@ macro delegate2(sourceExemplar, targets)
     funcname = esc(funcnames[i])
     fdefs[i] = quote
                  ($funcname)(a::($typesname), b::($typesname), args...) = 
-                   ($funcname)(a.($fieldname), b.($fieldname), args...)
+                   ($typesname)( ($funcname)(a.($fieldname), b.($fieldname), args...) )
                end
     end
   return Expr(:block, fdefs...)
