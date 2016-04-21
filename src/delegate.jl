@@ -6,7 +6,10 @@
 
     This macro call
  
-       @delegate MyContainer.elems [:size, :length, :endof]
+       @delegate MyContainer.elems [ size,  length,  endof]    #  exported implementation
+       
+       # the original implementation's macro call was thus:
+       # @delegate MyContainer.elems [:size, :length, :endof] 
 
     produces this block of expressions
  
