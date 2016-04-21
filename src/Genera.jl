@@ -12,7 +12,7 @@ module Genera
 
 export SysFloat, StdFloat, 
        @delegate, @delegate2,
-       @delegateTyped, @delegateTyped2T
+       @delegateTyped, @delegateTyped2
 
 include("delegate.jl")
 
