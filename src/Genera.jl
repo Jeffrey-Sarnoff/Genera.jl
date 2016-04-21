@@ -10,14 +10,18 @@ For example, Float16 and BigFloat could be included.
 """
 module Genera
 
-export SysFloat, StdFloat, 
+export SysFloat, StdFloat, SysInt, StdInt,
        @delegate, @delegate2,
        @delegateTyped, @delegateTyped2
 
-include("delegate.jl")
 
 !isdefined(:SysFloat) && typealias SysFloat Union{Float64, Float32}
 !isdefined(:StdFloat) && typealias StdFloat Union{Float64, Float32, Float16}
+
+!isdefined(:SysInt) && typealias SysInt Union{Int64, Int32}
+!isdefined(:StdInt) && typealias StdInt Union{Int64, Int32, Int16}
+
+include("delegate.jl")
 
 
 end # Genera
