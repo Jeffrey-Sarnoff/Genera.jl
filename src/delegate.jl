@@ -54,10 +54,47 @@ macro delegate(source, targets)
   return Expr(:block, fdefs...)
 end
 
-
-# for methods that take two equi-typed source arguments) and return an equi-typed result
+# for methods that take two equi-typed source arguments
 
 macro delegate2(sourceExemplar, targets)
+  typesname = esc(sourceExemplar.args[1])
+  fieldname = esc(Expr(:quote, sourceExemplar.args[2].args[1]))
+  funcnames = targets.args
+  n = length(funcnames)
+  fdefs = Array(Any, n)
+  for i in 1:n
+    funcname = esc(funcnames[i])
+    fdefs[i] = quote
+                 ($funcname)(a::($typesname), b::($typesname), args...) = 
+                   ($funcname)(a.($fieldname), b.($fieldname), args...)
+               end
+    end
+  return Expr(:block, fdefs...)
+end
+
+
+# for methods that take one typed argument and return an iso-typed result
+
+macro delegateTyped(source, targets)
+  typename = esc(source.args[1])
+  fieldname = esc(Expr(:quote, source.args[2].args[1]))
+  funcnames = targets.args
+  n = length(funcnames)
+  fdefs = Array(Any, n)
+  for i in 1:n
+    funcname = esc(funcnames[i])
+    fdefs[i] = quote
+                 ($funcname)(a::($typename), args...) = 
+                   ($typename)( ($funcname)(a.($fieldname), args...) )
+               end
+    end
+  return Expr(:block, fdefs...)
+end
+
+
+# for methods that take two equi-typed source arguments) and return an iso-typed result
+
+macro delegateTyped2(sourceExemplar, targets)
   typesname = esc(sourceExemplar.args[1])
   fieldname = esc(Expr(:quote, sourceExemplar.args[2].args[1]))
   funcnames = targets.args
