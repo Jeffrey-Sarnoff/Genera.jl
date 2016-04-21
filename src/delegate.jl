@@ -15,9 +15,6 @@
       endof( a::MyContainer) = endof( a.elems)
 
 
-     macro text from
-     https://github.com/JuliaLang/DataStructures.jl/blob/master/src/delegate.jl
-     
      
     also this from Toivo for delegation with nary ops
     (https://groups.google.com/forum/#!msg/julia-dev/MV7lYRgAcB0/-tS50TreaPoJ)
@@ -35,6 +32,11 @@
     julia> for f in (:sin, :cos) # delegate sin and cos
                @eval $f(a::T) = $f(a.x)
            end
+
+
+    macro text from
+      https://github.com/JuliaLang/DataStructures.jl/blob/master/src/delegate.jl
+
 =#
 
 macro delegate(source, targets)
