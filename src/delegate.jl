@@ -53,3 +53,21 @@ macro delegate(source, targets)
     end
   return Expr(:block, fdefs...)
 end
+
+
+
+macro delegate2(sourceExemplar, targets)
+  typesname = esc(sourceExemplar.args[1])
+  fieldname = esc(Expr(:quote, sourceExemplar.args[2].args[1]))
+  funcnames = targets.args
+  n = length(funcnames)
+  fdefs = Array(Any, n)
+  for i in 1:n
+    funcname = esc(funcnames[i])
+    fdefs[i] = quote
+                 ($funcname)(a::($typesname), b::($typesname), args...) = 
+                   ($funcname)(a.($fieldname), b.($fieldname), args...)
+               end
+    end
+  return Expr(:block, fdefs...)
+end
