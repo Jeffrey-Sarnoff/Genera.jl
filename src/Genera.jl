@@ -11,6 +11,7 @@ For example, Float16 and BigFloat could be included.
 module Genera
 
 export SysFloat, StdFloat, SysInt, StdInt,
+       ilog2,
        @delegate, @delegate2,
        @delegateTyped, @delegateTyped2
 
@@ -22,6 +23,6 @@ export SysFloat, StdFloat, SysInt, StdInt,
 !isdefined(:StdInt) && typealias StdInt Union{Int64, Int32, Int16}
 
 include("delegate.jl")
-
+include("bitrelated.jl")
 
 end # Genera
