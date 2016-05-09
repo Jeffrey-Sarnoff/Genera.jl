@@ -11,9 +11,9 @@ For example, Float16 and BigFloat could be included.
 module Genera
 
 export SysFloat, StdFloat, SysInt, StdInt,
-       ilog2,
        @delegate, @delegate2,
-       @delegateTyped, @delegateTyped2
+       @delegateTyped, @delegateTyped2,
+       ilog2       
 
 
 !isdefined(:SysFloat) && typealias SysFloat Union{Float64, Float32}
