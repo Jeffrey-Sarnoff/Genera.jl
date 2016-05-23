@@ -1,6 +1,8 @@
 #=
-    based on original work by John Myles White and Toivo (see end of file for source code refs)
+    based on original work by John Myles White and Toivo Henningsson
+    (see end of file for source code refs)
 =#
+
 """
     macros for doing delegation
 
