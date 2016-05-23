@@ -51,7 +51,7 @@ macro delegate(source, targets)
   for i in 1:n
     funcname = esc(funcnames[i])
     fdefs[i] = quote
-                 ($funcname)(a::($typename), args...) = ($funcname)(a.($fieldname), args...)
+                 ($funcname)(a::($typename), args...) = ($funcname)(getfield(a,($fieldname)), args...)
                end
     end
   return Expr(:block, fdefs...)
@@ -69,7 +69,7 @@ macro delegate2(sourceExemplar, targets)
     funcname = esc(funcnames[i])
     fdefs[i] = quote
                  ($funcname)(a::($typesname), b::($typesname), args...) = 
-                   ($funcname)(a.($fieldname), b.($fieldname), args...)
+                   ($funcname)(getfield(a,($fieldname)), getfield(b,($fieldname)), args...)
                end
     end
   return Expr(:block, fdefs...)
@@ -88,7 +88,7 @@ macro delegateTyped(source, targets)
     funcname = esc(funcnames[i])
     fdefs[i] = quote
                  ($funcname)(a::($typename), args...) = 
-                   ($typename)( ($funcname)(a.($fieldname), args...) )
+                   ($typename)( ($funcname)(getfield(a,($fieldname)), args...) )
                end
     end
   return Expr(:block, fdefs...)
@@ -107,7 +107,7 @@ macro delegateTyped2(sourceExemplar, targets)
     funcname = esc(funcnames[i])
     fdefs[i] = quote
                  ($funcname)(a::($typesname), b::($typesname), args...) = 
-                   ($typesname)( ($funcname)(a.($fieldname), b.($fieldname), args...) )
+                   ($typesname)( ($funcname)(getfield(a,($fieldname)), getfield(b,($fieldname)), args...) )
                end
     end
   return Expr(:block, fdefs...)
