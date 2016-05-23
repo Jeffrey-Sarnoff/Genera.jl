@@ -4,7 +4,7 @@
 """
     macros for doing delegation
 
-    import Base: length, endof, (abs), (+)
+    import Base: length, last, (abs), (+)
     
     Given these types
     
@@ -17,20 +17,20 @@
        @delegateTyped MyInt.i      [ abs, ]
        @delegateTyped2 MyInt.i     [ (+), ]
        
-       @delegate MyInts.elems [ length,  endof]
-       @delegate MyNums.elems [ length,  endof]
+       @delegate MyInts.elems [ length,  last ]
+       @delegate MyNums.elems [ length,  last ]
        
     produces these blocks of expressions
  
       abs(a::MyInt)           = MyInt( abs( getfield(a, :i) ) )
       (+)(a::MyInt, b::MyInt) = MyInt( (+)( getfield(a, :i), getfield(b, :i) ) ) 
  
+      last( a::MyInts)  = last( getfield(a, :elems) )
       length(a::MyInts) = length( getfield(a, :elems) )
-      endof( a::MyInts) = endof(  getfield(a, :elems) )
-
+ 
+      last( a::MyNums)  = last( getfield(a, :elems) )
       length(a::MyNums) = length( getfield(a, :elems) )
-      endof( a::MyNums) = endof(  getfield(a, :elems) )
-
+  
     and allows
     
       myFirstInt = MyInt(-1)
@@ -45,8 +45,8 @@
       length(myInts) # 5
       length(myNums) # 3
       
-      endof(myInts)  # 1
-      endof(myNums)  # 3.0
+      last(myInts)  # 1
+      last(myNums)  # 3.0
 """
 macro delegate(source, targets)
   typename = esc(source.args[1])
