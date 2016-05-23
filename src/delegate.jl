@@ -4,37 +4,49 @@
 """
     macros for doing delegation
 
+    import Base: length, endof, (abs), (+)
+    
     Given these types
     
-       type MyInts                     type MyNums{T}
-          elems::Int                      elems::T
-       end                             end
+       type MyInt          type MyInts                   type MyNums{T}
+          i::Int              elems::Vector{Int}           elems::T
+       end                 end                           end
         
     These macro calls
  
-       @delegate MyInts.elems [ size,  length,  endof]    #  exported implementation
-       @delegate MyNums.elems [ size,  length,  endof]    #  exported implementation
+       @delegateTyped MyInt.i      [ abs, ]
+       @delegateTyped2 MyInt.i     [ (+), ]
+       
+       @delegate MyInts.elems [ length,  endof]
+       @delegate MyNums.elems [ length,  endof]
        
     produces these blocks of expressions
  
-      size(  a::MyInts) = size(   getfield(a, :elems) )
+      abs(a::MyInt)           = MyInt( abs( getfield(a, :i) ) )
+      (+)(a::MyInt, b::MyInt) = MyInt( (+)( getfield(a, :i), getfield(b, :i) ) ) 
+ 
       length(a::MyInts) = length( getfield(a, :elems) )
       endof( a::MyInts) = endof(  getfield(a, :elems) )
 
-      size(  a::MyNums) = size(   getfield(a, :elems) )
       length(a::MyNums) = length( getfield(a, :elems) )
       endof( a::MyNums) = endof(  getfield(a, :elems) )
 
     and allows
     
+      myFirstInt = MyInt(-1)
+      mySecondInt = MyInt(2)
+
+      abs(myFirstInt)          # MyInt(1)
+      myFirstInt + mySecondInt # MyInt(1)
+      
       myInts = MyInts([5, 4, 3, 2, 1])
       myNums = MyNums([1.0, 2.0, 3.0])
       
       length(myInts) # 5
       length(myNums) # 3
       
-      endof(myInts) # 1
-      endof(myNums) # 3.0
+      endof(myInts)  # 1
+      endof(myNums)  # 3.0
 """
 macro delegate(source, targets)
   typename = esc(source.args[1])
