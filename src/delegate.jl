@@ -1,47 +1,41 @@
 #=
-    by John Myles White 
-    (description and logic from https://gist.github.com/johnmyleswhite/5225361)
-
-    A macro for doing delegation
-
-    This macro call
- 
-       @delegate MyContainer.elems [ size,  length,  endof]    #  exported implementation
-       
-       # the original implementation's macro call was thus:
-       # @delegate MyContainer.elems [:size, :length, :endof] 
-
-    produces this block of expressions
- 
-      size(  a::MyContainer) = size(  a.elems)
-      length(a::MyContainer) = length(a.elems)
-      endof( a::MyContainer) = endof( a.elems)
-
-
-     
-    also this from Toivo for delegation with nary ops
-    (https://groups.google.com/forum/#!msg/julia-dev/MV7lYRgAcB0/-tS50TreaPoJ)
-    
-    julia> type T
-               x
-           end
-
-    julia> import Base.sin, Base.cos
-
-    julia> for f in (:+, :- )    # delegate binary + and - to T.x
-               @eval $f(a::T, b::T) = $f(a.x, b.x)
-           end
-
-    julia> for f in (:sin, :cos) # delegate sin and cos
-               @eval $f(a::T) = $f(a.x)
-           end
-
-
-    macro text from
-      https://github.com/JuliaLang/DataStructures.jl/blob/master/src/delegate.jl
-
+    originally by John Myles White (see end of file for source code refs)
 =#
+"""
+    macros for doing delegation
 
+    Given these types
+    
+       type MyInts                     type MyNums{T}
+          elems::Int                      elems::T
+       end                             end
+        
+    These macro calls
+ 
+       @delegate MyInts.elems [ size,  length,  endof]    #  exported implementation
+       @delegate MyNums.elems [ size,  length,  endof]    #  exported implementation
+       
+    produces these blocks of expressions
+ 
+      size(  a::MyInts) = size(   getfield(a, :elems) )
+      length(a::MyInts) = length( getfield(a, :elems) )
+      endof( a::MyInts) = endof(  getfield(a, :elems) )
+
+      size(  a::MyNums) = size(   getfield(a, :elems) )
+      length(a::MyNums) = length( getfield(a, :elems) )
+      endof( a::MyNums) = endof(  getfield(a, :elems) )
+
+    and allows
+    
+      myInts = MyInts([5, 4, 3, 2, 1])
+      myNums = MyNums([1.0, 2.0, 3.0])
+      
+      length(myInts) # 5
+      length(myNums) # 3
+      
+      endof(myInts) # 1
+      endof(myNums) # 3.0
+"""
 macro delegate(source, targets)
   typename = esc(source.args[1])
   fieldname = esc(Expr(:quote, source.args[2].args[1]))
@@ -112,3 +106,30 @@ macro delegateTyped2(sourceExemplar, targets)
     end
   return Expr(:block, fdefs...)
 end
+
+#=
+    initial implementation
+    (description and logic from https://gist.github.com/johnmyleswhite/5225361)
+
+    additional macro text from
+      https://github.com/JuliaLang/DataStructures.jl/blob/master/src/delegate.jl
+
+     
+    and from Toivo for delegation with nary ops
+    (https://groups.google.com/forum/#!msg/julia-dev/MV7lYRgAcB0/-tS50TreaPoJ)
+    
+    julia> type T
+               x
+           end
+
+    julia> import Base.sin, Base.cos
+
+    julia> for f in (:+, :- )    # delegate binary + and - to T.x
+               @eval $f(a::T, b::T) = $f(a.x, b.x)
+           end
+
+    julia> for f in (:sin, :cos) # delegate sin and cos
+               @eval $f(a::T) = $f(a.x)
+           end
+=#
+
