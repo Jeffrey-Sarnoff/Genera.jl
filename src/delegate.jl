@@ -1,5 +1,5 @@
 #=
-    original idea by John Myles White (see end of file for source code refs)
+    based on original work by John Myles White and Toivo (see end of file for source code refs)
 =#
 """
     macros for doing delegation
